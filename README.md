@@ -32,6 +32,8 @@ test Js
 ## dependencies
 
    https://jasmine.github.io/ - library tests
+   https://materializecss.com/ -  style 
+
 
 ## Run test
   Open jstest/test/test.html

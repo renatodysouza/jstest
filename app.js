@@ -144,21 +144,27 @@ function renderUserList(userList) {
 }
 
 function renderGroupCount1() {
-    document.querySelector('#renderGroupCount1').innerHTML = countGroups(listUsers(), 'Manager')
+    if(document.querySelector('#renderGroupCount1')) {
+       document.querySelector('#renderGroupCount1').innerHTML = countGroups(listUsers(), 'Manager');
+    }
 }
 
 function renderGroupCount2() {
-    document.querySelector('#renderGroupCount2').innerHTML = countGroups(listUsers(), 'Developer')
+    if (document.querySelector('#renderGroupCount2')) {
+        document.querySelector('#renderGroupCount2').innerHTML = countGroups(listUsers(), 'Developer');
+    }
 }
 
 function renderGroupCount3() {
-    document.querySelector('#renderGroupCount3').innerHTML = countGroups(listUsers(), 'Customer Service')
-    
+    if (document.querySelector('#renderGroupCount3')) {
+        document.querySelector('#renderGroupCount3').innerHTML = countGroups(listUsers(), 'Customer Service');
+    }    
 }
 
 function renderGroupCount4() {
-    document.querySelector('#renderGroupCount4').innerHTML = countGroups(listUsers(), 'Sales')
-    
+    if (document.querySelector('#renderGroupCount4')) {
+        document.querySelector('#renderGroupCount4').innerHTML = countGroups(listUsers(), 'Sales');
+    }    
 }
 
 function appInit() {
