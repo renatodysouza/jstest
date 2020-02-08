@@ -1,8 +1,8 @@
-# jstest
+# Javascript test 
 test Js
 
 ### INTRO:
-   All of the code written needs to be native javascript.
+  All of the code written needs to be native javascript.
 
 ### TASK 1:
    Render the total user count in the renderUserCount div.
