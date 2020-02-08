@@ -32,7 +32,7 @@ describe('list users' , ()=> {
     });
 
     it('Should be return date format 28th September 1999 ', ()=> {
-        expect(changeFormatData('1999-09-28')).toBe('28th September 1999');
+        expect(changeFormatData('1999-09-28')).toContain('28th September 1999');
     });
 
     it('Should be return only one user', ()=> {

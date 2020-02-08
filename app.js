@@ -122,9 +122,9 @@ function excludeUser(userlist, exclude) {
 function changeFormatData(date) {
     const transformDate = new Date(date);
     const month = transformDate.toLocaleString('default', { month: 'long' });
-    const ordinal = `${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate.getFullYear()}`
+    const ordinal = `${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate
+        .getFullYear()}`
     return ordinal;
-    
 }
 
 function countGroups(listUsers,group) {
@@ -139,31 +139,36 @@ function countGroups(listUsers,group) {
 
 function renderUserList(userList) {
     if (document.querySelector('#renderUserList')) {
-        document.querySelector('#renderUserList').innerHTML = renderTable(listUsers());
+        document.querySelector('#renderUserList')
+        .innerHTML = renderTable(listUsers());
     }  
 }
 
 function renderGroupCount1() {
     if(document.querySelector('#renderGroupCount1')) {
-       document.querySelector('#renderGroupCount1').innerHTML = countGroups(listUsers(), 'Manager');
+       document.querySelector('#renderGroupCount1')
+       .innerHTML = countGroups(listUsers(), 'Manager');
     }
 }
 
 function renderGroupCount2() {
     if (document.querySelector('#renderGroupCount2')) {
-        document.querySelector('#renderGroupCount2').innerHTML = countGroups(listUsers(), 'Developer');
+        document.querySelector('#renderGroupCount2')
+        .innerHTML = countGroups(listUsers(), 'Developer');
     }
 }
 
 function renderGroupCount3() {
     if (document.querySelector('#renderGroupCount3')) {
-        document.querySelector('#renderGroupCount3').innerHTML = countGroups(listUsers(), 'Customer Service');
+        document.querySelector('#renderGroupCount3')
+        .innerHTML = countGroups(listUsers(), 'Customer Service');
     }    
 }
 
 function renderGroupCount4() {
     if (document.querySelector('#renderGroupCount4')) {
-        document.querySelector('#renderGroupCount4').innerHTML = countGroups(listUsers(), 'Sales');
+        document.querySelector('#renderGroupCount4')
+        .innerHTML = countGroups(listUsers(), 'Sales');
     }    
 }
 
