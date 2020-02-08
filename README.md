@@ -28,3 +28,10 @@ test Js
 ### TASK 7:
   The number of users in each group need to be rendered in the renderGroupCount divs.
   This needs to exclude users who are suspended.
+
+## dependencies
+
+   https://jasmine.github.io/ - library tests
+
+## Run test
+  Open jstest/test/test.html
