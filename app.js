@@ -1,3 +1,6 @@
+/**
+ * Data users
+ */
 const dataUsers = [
     {usersName: 'Christian Wood', usersGroupID: 1, usersDOB: '1999-09-28'},
     {usersName: 'Tina Clarke', usersGroupID: 1, usersDOB: '1973-10-23'},
@@ -27,6 +30,9 @@ const dataUsers = [
     {usersName: 'Ken White', usersGroupID: 3, usersDOB: '1977-12-07'}
 ];
 
+/**
+ * Groups 
+ */
 const dataGroups = [
     {groupID: 1, groupName: 'Manager'},
     {groupID: 2, groupName: 'Developer'},
@@ -34,18 +40,24 @@ const dataGroups = [
     {groupID: 4, groupName: 'Sales'}
 ];
 
+/**
+ * Users that should be excludes
+ */
 const usersExcludes = ['Adrian Robinson', 'Karen Matthews', 'Mike Walker'];
 
-function totalUserCount(users) {
-    return users.length;
-}
-
+/**
+ * Render number of users
+ */
 function showTotalUser() {
     if(document.querySelector('#renderUserCount')) {
-        document.querySelector('#renderUserCount').innerText = totalUserCount(listUsers());
+        document.querySelector('#renderUserCount')
+        .innerText = listUsers().length;
     }
 }
 
+/**
+ * Render table of users
+ */
 function renderTable(userList) {
     return `<table>
     <thead>
@@ -66,26 +78,33 @@ function renderTable(userList) {
   </table>`; 
 }
 
+/**
+ * 
+ * return number of months 1s, 2nd, 3rd and th 
+ */
 function changeToOrdinal(date) {
     let dateOrdinal;
     switch (date) {
         case 1:
-            dateOrdinal = '1st'
+            dateOrdinal = '1st';
             break;
         case 2:
-            dateOrdinal = '2nd'
+            dateOrdinal = '2nd';
             break;
         case 3:
-            dateOrdinal = '3rd'
+            dateOrdinal = '3rd';
         break;                
 
         default:
-            dateOrdinal = `${date}th`
+            dateOrdinal = `${date}th`;
         break;
     }
     return dateOrdinal;
 }
 
+/**
+ * Return group by id
+ */
 function giveGroupById(id) {
     const dtGroup = dataGroups.filter(group => {
         if (group.groupID === id) {
@@ -95,6 +114,10 @@ function giveGroupById(id) {
     return dtGroup[0].groupName;   
 }
 
+/**
+ *  Rotate list user and transform list with new keys and group name
+ * 
+ */
 function addGroupInUserList() {
     let listUser = []
     const originalListUser = dataUsers.map(user => {
@@ -102,15 +125,25 @@ function addGroupInUserList() {
         newListUser['name'] = user.usersName;
         newListUser['group'] = giveGroupById(user.usersGroupID);
         newListUser['dateOfBirthDay'] = user.usersDOB;
-        listUser.push(newListUser)
+        listUser.push(newListUser);
     });
-    return excludeUser(listUser, usersExcludes);
+    return listUser;
 }
 
+/**
+ * 
+ * Return new list with value excluded
+ * 
+ */
 function listUsers() {
-    return addGroupInUserList();
+    return excludeUser(addGroupInUserList(), usersExcludes);
 }
 
+/**
+ * 
+ * Receive two arrays
+ * user list and usersExcludes
+ */
 function excludeUser(userlist, exclude) {
     return userlist.filter(user => {
         if(!exclude.includes(user.name)) {
@@ -119,14 +152,24 @@ function excludeUser(userlist, exclude) {
     });
 }
 
+/**
+ * 
+ *  Tranform format date in e.g. "28th September 1999"
+ */
 function changeFormatData(date) {
     const transformDate = new Date(date);
     const month = transformDate.toLocaleString('default', { month: 'long' });
-    const ordinal = `${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate
+    const ordinal = `
+        ${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate
         .getFullYear()}`
     return ordinal;
 }
 
+/**
+ * Count groups
+ * Receive array user list and string name of group
+ * return integer
+ */
 function countGroups(listUsers,group) {
     let groups = [];
     listUsers.map(user => {
@@ -137,6 +180,9 @@ function countGroups(listUsers,group) {
     return groups.length;
 }
 
+/**
+ * Render table list users
+ */
 function renderUserList(userList) {
     if (document.querySelector('#renderUserList')) {
         document.querySelector('#renderUserList')
@@ -144,6 +190,10 @@ function renderUserList(userList) {
     }  
 }
 
+/**
+ * 
+ * Render number of Managers
+ */
 function renderGroupCount1() {
     if(document.querySelector('#renderGroupCount1')) {
        document.querySelector('#renderGroupCount1')
@@ -151,6 +201,10 @@ function renderGroupCount1() {
     }
 }
 
+/**
+ * 
+ * Render number of Developers
+ */
 function renderGroupCount2() {
     if (document.querySelector('#renderGroupCount2')) {
         document.querySelector('#renderGroupCount2')
@@ -158,6 +212,10 @@ function renderGroupCount2() {
     }
 }
 
+/**
+ * 
+ * Render number of Customer Service Ops
+ */
 function renderGroupCount3() {
     if (document.querySelector('#renderGroupCount3')) {
         document.querySelector('#renderGroupCount3')
@@ -165,6 +223,10 @@ function renderGroupCount3() {
     }    
 }
 
+/**
+ * 
+ * Render number of Sales
+ */
 function renderGroupCount4() {
     if (document.querySelector('#renderGroupCount4')) {
         document.querySelector('#renderGroupCount4')
@@ -172,6 +234,9 @@ function renderGroupCount4() {
     }    
 }
 
+/**
+ * Iniatilize application
+ */
 function appInit() {
     showTotalUser();
     renderUserList(listUsers());
@@ -184,3 +249,4 @@ function appInit() {
 document.addEventListener("DOMContentLoaded", function(){
     appInit();
 });
+

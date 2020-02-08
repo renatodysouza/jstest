@@ -1,12 +1,4 @@
 describe('list users' , ()=> {
-    it('Should be return length 2 in totalUserCount function', ()=> {
-       const user = [
-        {usersName: 'Christian Wood', usersGroupID: 1, usersDOB: '1999-09-28'},
-        {usersName: 'Tina Clarke', usersGroupID: 1, usersDOB: '1973-10-23'},
-        ];
-       expect(totalUserCount(user)).toBe(2);
-    });
-
     it('Should contain Renato in return of renderTable function', ()=> {
     const userList = [
         {name: 'Renato', group:'dev', dateOfBirthday: '03/09/1977' },
