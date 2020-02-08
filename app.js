@@ -1,5 +1,4 @@
-// Users
-var dataUsers = [
+const dataUsers = [
     {usersName: 'Christian Wood', usersGroupID: 1, usersDOB: '1999-09-28'},
     {usersName: 'Tina Clarke', usersGroupID: 1, usersDOB: '1973-10-23'},
     {usersName: 'Laura White', usersGroupID: 2, usersDOB: '1992-01-14'},
@@ -28,38 +27,149 @@ var dataUsers = [
     {usersName: 'Ken White', usersGroupID: 3, usersDOB: '1977-12-07'}
 ];
 
-// Groups
-var dataGroups = [
+const dataGroups = [
     {groupID: 1, groupName: 'Manager'},
     {groupID: 2, groupName: 'Developer'},
     {groupID: 3, groupName: 'Customer Service'},
     {groupID: 4, groupName: 'Sales'}
 ];
 
-// INTRO:
-// All of the code written needs to be native javascript.
+const usersExcludes = ['Adrian Robinson', 'Karen Matthews', 'Mike Walker'];
 
-// TASK 1:
-// Render the total user count in the renderUserCount div.
+function totalUserCount(users) {
+    return users.length;
+}
 
-// TASK 2:
-// Each users name from the list of users needs to be rendered in the renderUserList div.
-// Each user needs to be listed on their own line.
+function showTotalUser() {
+    if(document.querySelector('#renderUserCount')) {
+        document.querySelector('#renderUserCount').innerText = totalUserCount(listUsers());
+    }
+}
 
-// TASK 3:
-// On each users row, next to their name, the group name they belong to needs to be shown.
+function renderTable(userList) {
+    return `<table>
+    <thead>
+      <tr>
+          <th>Name</th>
+          <th>Group</th>
+          <th>Date of birth</th>
+      </tr>
+    </thead>
+    <tbody>${userList.map(user => {
+       return `<tr ${user.group === 'Manager' ? 'style = background-color:#9bb59b' : "" } >
+        <td>${user.name}</td>
+        <td>${user.group}</td>
+        <td>${changeFormatData(user.dateOfBirthDay)}</td>
+      </tr>`
+    }).join('')}
+    </tbody>
+  </table>`; 
+}
 
-// TASK 4:
-// On each users row, next to their group name, their date of birth needs to be shown.
-// The date of birth needs to be in this format: 2nd July 1980.
+function changeToOrdinal(date) {
+    let dateOrdinal;
+    switch (date) {
+        case 1:
+            dateOrdinal = '1st'
+            break;
+        case 2:
+            dateOrdinal = '2nd'
+            break;
+        case 3:
+            dateOrdinal = '3rd'
+        break;                
 
-// TASK 5:
-// Some users have been suspended, and need to be excluded from being rendered.
-// These users are: Adrian Robinson, Karen Matthews, Mike Walker
+        default:
+            dateOrdinal = `${date}th`
+        break;
+    }
+    return dateOrdinal;
+}
 
-// TASK 6:
-// All of the users who are managers need to have their row text be colored green.
+function giveGroupById(id) {
+    const dtGroup = dataGroups.filter(group => {
+        if (group.groupID === id) {
+            return group.groupName;
+        }
+    });
+    return dtGroup[0].groupName;   
+}
 
-// TASK 7:
-// The number of users in each group need to be rendered in the renderGroupCount divs.
-// This needs to exclude users who are suspended.
+function addGroupInUserList() {
+    let listUser = []
+    const originalListUser = dataUsers.map(user => {
+        let newListUser = {};
+        newListUser['name'] = user.usersName;
+        newListUser['group'] = giveGroupById(user.usersGroupID);
+        newListUser['dateOfBirthDay'] = user.usersDOB;
+        listUser.push(newListUser)
+    });
+    return excludeUser(listUser, usersExcludes);
+}
+
+function listUsers() {
+    return addGroupInUserList();
+}
+
+function excludeUser(userlist, exclude) {
+    return userlist.filter(user => {
+        if(!exclude.includes(user.name)) {
+            return user;
+        }
+    });
+}
+
+function changeFormatData(date) {
+    const transformDate = new Date(date);
+    const month = transformDate.toLocaleString('default', { month: 'long' });
+    const ordinal = `${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate.getFullYear()}`
+    return ordinal;
+    
+}
+
+function countGroups(listUsers,group) {
+    let groups = [];
+    listUsers.map(user => {
+        if (user.group === group ) {
+            groups.push(user.group);
+        }
+    });
+    return groups.length;
+}
+
+function renderUserList(userList) {
+    if (document.querySelector('#renderUserList')) {
+        document.querySelector('#renderUserList').innerHTML = renderTable(listUsers());
+    }  
+}
+
+function renderGroupCount1() {
+    document.querySelector('#renderGroupCount1').innerHTML = countGroups(listUsers(), 'Manager')
+}
+
+function renderGroupCount2() {
+    document.querySelector('#renderGroupCount2').innerHTML = countGroups(listUsers(), 'Developer')
+}
+
+function renderGroupCount3() {
+    document.querySelector('#renderGroupCount3').innerHTML = countGroups(listUsers(), 'Customer Service')
+    
+}
+
+function renderGroupCount4() {
+    document.querySelector('#renderGroupCount4').innerHTML = countGroups(listUsers(), 'Sales')
+    
+}
+
+function appInit() {
+    showTotalUser();
+    renderUserList(listUsers());
+    renderGroupCount1();
+    renderGroupCount2();
+    renderGroupCount3();
+    renderGroupCount4();
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+    appInit();
+});
