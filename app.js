@@ -30,6 +30,8 @@ const dataUsers = [
     {usersName: 'Ken White', usersGroupID: 3, usersDOB: '1977-12-07'}
 ];
 
+let pageSelected = '1';
+
 /**
  * Groups 
  */
@@ -39,6 +41,12 @@ const dataGroups = [
     {groupID: 3, groupName: 'Customer Service'},
     {groupID: 4, groupName: 'Sales'}
 ];
+
+const rangePage = 10;
+const paginate =  {
+    start: 0,
+    end: 10
+}
 
 /**
  * Users that should be excludes
@@ -59,6 +67,7 @@ function showTotalUser() {
  * Render table of users
  */
 function renderTable(userList) {
+    const listWithPagination = selectIntervalUserList(userList, paginate)
     return `<table>
     <thead>
       <tr>
@@ -67,7 +76,7 @@ function renderTable(userList) {
           <th>Date of birth</th>
       </tr>
     </thead>
-    <tbody>${userList.map(user => {
+    <tbody>${listWithPagination.map(user => {
        return `<tr ${user.group === 'Manager' ? 'style = background-color:#9bb59b' : "" } >
         <td>${user.name}</td>
         <td>${user.group}</td>
@@ -115,6 +124,37 @@ function giveGroupById(id) {
 }
 
 /**
+ * 
+ * listen event click in page numbers
+ */
+function listenEventPageNumber() {
+    let elem = document.querySelectorAll('li');
+    for (let index = 0; index < elem.length; index++) {
+        elem[index].addEventListener('click', ()=> {
+            if (elem[index].innerText === pageSelected) {
+                return;
+            }
+            pageSelected = elem[index].innerText;
+            paginate.end = (elem[index].innerText * rangePage);
+            paginate.start = ( paginate.end - rangePage);
+            addCssActiveInPageSelected()
+            renderUserList(listUsers());
+        });
+    }
+}
+
+/**
+ * select interval of user list
+ */
+function selectIntervalUserList(userList, rangePage) {
+    const { start, end } = rangePage;
+    if (end >= userList.length ) {
+        return userList.slice(start); 
+    }
+    return userList.slice(start, end);  
+}
+
+/**
  *  Rotate list user and transform list with new keys and group name
  * 
  */
@@ -130,6 +170,37 @@ function addGroupInUserList() {
     return listUser;
 }
 
+/**
+ * add classe active in paginator active
+ */
+function addCssActiveInPageSelected() {
+    let elem = document.querySelectorAll('li');
+    for (let index = 0; index < elem.length; index++) {
+        if (elem[index].innerText === pageSelected) {
+            elem[index].className = 'active';
+        } else {
+            elem[index].className = 'waves-effect';
+        }
+    }
+}
+
+/**
+ * add number of pages
+ */
+function generateNumberOfPages() {
+    let elem = '';
+    const numberOfPages = listUsers().length / (paginate.end - paginate.start);
+    let numbers = numberOfPages % 1 === 0 ? Array(numberOfPages) :
+     Array(Math.round(numberOfPages + 1));
+    for (let index = 0; index < numbers.length; index++) {
+        elem += `<li class="waves-effect"><a href="#!">${index + 1}</a></li>`
+    }
+
+    if (document.querySelector('.pagination')) {
+        document.querySelector('.pagination').innerHTML = elem;
+    }
+    
+}
 /**
  * 
  * Return new list with value excluded
@@ -244,6 +315,9 @@ function appInit() {
     renderGroupCount2();
     renderGroupCount3();
     renderGroupCount4();
+    generateNumberOfPages();
+    addCssActiveInPageSelected();
+    listenEventPageNumber();
 }
 
 document.addEventListener("DOMContentLoaded", function(){

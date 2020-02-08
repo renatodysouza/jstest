@@ -59,4 +59,19 @@ describe('list users' , ()=> {
         ];
         expect(countGroups(dataGroups, 'Manager')).toBe(1);
     });
+
+    it('Should be return 2 in selectIntervalUserList function', ()=> {
+        const dataGroups = [
+            {groupID: 1, group: 'Manager'},
+            {groupID: 2, group: 'Developer'},
+            {groupID: 3, group: 'Developer'},
+            {groupID: 4, group: 'Developer'},
+        ];
+         let page = {
+             start: 0,
+             end: 2
+         }
+        const listSelected = selectIntervalUserList(dataGroups, page);
+        expect(listSelected.length).toBe(2);
+    });
 });
