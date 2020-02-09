@@ -42,7 +42,14 @@ const dataGroups = [
     {groupID: 4, groupName: 'Sales'}
 ];
 
+/**
+ * Range of pages
+ */
 const rangePage = 10;
+
+/**
+ * default values
+ */
 const paginate =  {
     start: 0,
     end: 10
@@ -54,13 +61,62 @@ const paginate =  {
 const usersExcludes = ['Adrian Robinson', 'Karen Matthews', 'Mike Walker'];
 
 /**
- * Render number of users
+ * Return group by id
  */
-function showTotalUser() {
-    if(document.querySelector('#renderUserCount')) {
-        document.querySelector('#renderUserCount')
-        .innerText = listUsers().length;
+function giveGroupById(id) {
+    const dtGroup = dataGroups.filter(group => {
+        if (group.groupID === id) {
+            return group.groupName;
+        }
+    });
+    return dtGroup[0].groupName;   
+}
+
+/**
+ * 
+ * return number of months 1s, 2nd, 3rd and th 
+ */
+function changeToOrdinal(date) {
+    let dateOrdinal;
+    switch (date) {
+        case 1:
+            dateOrdinal = '1st';
+            break;
+        case 2:
+            dateOrdinal = '2nd';
+            break;
+        case 3:
+            dateOrdinal = '3rd';
+            break;                
+        default:
+            dateOrdinal = `${date}th`;
+            break;
     }
+    return dateOrdinal;
+}
+
+/**
+ * select interval of user list
+ */
+function selectIntervalUserList(userList, rangePage) {
+    const { start, end } = rangePage;
+    if (end >= userList.length ) {
+        return userList.slice(start); 
+    }
+    return userList.slice(start, end);  
+}
+
+/**
+ * 
+ *  Tranform format date in e.g. "28th September 1999"
+ */
+function changeFormatData(date) {
+    const transformDate = new Date(date);
+    const month = transformDate.toLocaleString('default', { month: 'long' });
+    const ordinal = `
+        ${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate
+        .getFullYear()}`
+    return ordinal;
 }
 
 /**
@@ -88,39 +144,36 @@ function renderTable(userList) {
 }
 
 /**
- * 
- * return number of months 1s, 2nd, 3rd and th 
+ * add classe active in paginator active
  */
-function changeToOrdinal(date) {
-    let dateOrdinal;
-    switch (date) {
-        case 1:
-            dateOrdinal = '1st';
-            break;
-        case 2:
-            dateOrdinal = '2nd';
-            break;
-        case 3:
-            dateOrdinal = '3rd';
-        break;                
-
-        default:
-            dateOrdinal = `${date}th`;
-        break;
+function addCssActiveInPageSelected() {
+    let elem = document.querySelectorAll('li');
+    for (let index = 0; index < elem.length; index++) {
+        if (elem[index].innerText === pageSelected) {
+            elem[index].className = 'active';
+        } else {
+            elem[index].className = 'waves-effect';
+        }
     }
-    return dateOrdinal;
 }
 
 /**
- * Return group by id
+ * 
+ * Return new list with value excluded
+ * 
  */
-function giveGroupById(id) {
-    const dtGroup = dataGroups.filter(group => {
-        if (group.groupID === id) {
-            return group.groupName;
-        }
-    });
-    return dtGroup[0].groupName;   
+function listUsers() {
+    return excludeUser(addGroupInUserList(), usersExcludes);
+}
+
+/**
+ * Render table list users
+ */
+function renderUserList(userList) {
+    if (document.querySelector('#renderUserList')) {
+        document.querySelector('#renderUserList')
+        .innerHTML = renderTable(listUsers());
+    }  
 }
 
 /**
@@ -144,23 +197,12 @@ function listenEventPageNumber() {
 }
 
 /**
- * select interval of user list
- */
-function selectIntervalUserList(userList, rangePage) {
-    const { start, end } = rangePage;
-    if (end >= userList.length ) {
-        return userList.slice(start); 
-    }
-    return userList.slice(start, end);  
-}
-
-/**
  *  Rotate list user and transform list with new keys and group name
  * 
  */
 function addGroupInUserList() {
     let listUser = []
-    const originalListUser = dataUsers.map(user => {
+    dataUsers.map(user => {
         let newListUser = {};
         newListUser['name'] = user.usersName;
         newListUser['group'] = giveGroupById(user.usersGroupID);
@@ -168,20 +210,6 @@ function addGroupInUserList() {
         listUser.push(newListUser);
     });
     return listUser;
-}
-
-/**
- * add classe active in paginator active
- */
-function addCssActiveInPageSelected() {
-    let elem = document.querySelectorAll('li');
-    for (let index = 0; index < elem.length; index++) {
-        if (elem[index].innerText === pageSelected) {
-            elem[index].className = 'active';
-        } else {
-            elem[index].className = 'waves-effect';
-        }
-    }
 }
 
 /**
@@ -195,25 +223,32 @@ function generateNumberOfPages() {
     for (let index = 0; index < numbers.length; index++) {
         elem += `<li class="waves-effect"><a href="#!">${index + 1}</a></li>`
     }
-
-    if (document.querySelector('.pagination')) {
-        document.querySelector('.pagination').innerHTML = elem;
-    }
-    
+    return elem;
 }
+
 /**
- * 
- * Return new list with value excluded
- * 
+ * Render numbers  of pagination
  */
-function listUsers() {
-    return excludeUser(addGroupInUserList(), usersExcludes);
+function renderNumberPaginate() {
+    if (document.querySelector('.pagination')) {
+        document.querySelector('.pagination').innerHTML = generateNumberOfPages();
+    }
+}
+
+/**
+ * Render number of users
+ */
+function showTotalUser() {
+    if(document.querySelector('#renderUserCount')) {
+        document.querySelector('#renderUserCount')
+        .innerText = dataUsers.length;
+    }
 }
 
 /**
  * 
  * Receive two arrays
- * user list and usersExcludes
+ * userlist and usersExcludes
  */
 function excludeUser(userlist, exclude) {
     return userlist.filter(user => {
@@ -221,19 +256,6 @@ function excludeUser(userlist, exclude) {
             return user;
         }
     });
-}
-
-/**
- * 
- *  Tranform format date in e.g. "28th September 1999"
- */
-function changeFormatData(date) {
-    const transformDate = new Date(date);
-    const month = transformDate.toLocaleString('default', { month: 'long' });
-    const ordinal = `
-        ${changeToOrdinal(transformDate.getDate())} ${month} ${transformDate
-        .getFullYear()}`
-    return ordinal;
 }
 
 /**
@@ -249,16 +271,6 @@ function countGroups(listUsers,group) {
         }
     });
     return groups.length;
-}
-
-/**
- * Render table list users
- */
-function renderUserList(userList) {
-    if (document.querySelector('#renderUserList')) {
-        document.querySelector('#renderUserList')
-        .innerHTML = renderTable(listUsers());
-    }  
 }
 
 /**
@@ -315,7 +327,7 @@ function appInit() {
     renderGroupCount2();
     renderGroupCount3();
     renderGroupCount4();
-    generateNumberOfPages();
+    renderNumberPaginate();
     addCssActiveInPageSelected();
     listenEventPageNumber();
 }
