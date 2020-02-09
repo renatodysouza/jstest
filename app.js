@@ -133,7 +133,7 @@ function renderTable(userList) {
       </tr>
     </thead>
     <tbody>${listWithPagination.map(user => {
-       return `<tr ${user.group === 'Manager' ? 'style = background-color:#9bb59b' : "" } >
+       return `<tr ${user.group === 'Manager' ? 'style = background-color:#d3ead3' : "" } >
         <td>${user.name}</td>
         <td>${user.group}</td>
         <td>${changeFormatData(user.dateOfBirthDay)}</td>
